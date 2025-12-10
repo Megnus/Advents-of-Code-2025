@@ -1,7 +1,7 @@
 import aoc
 
 data = aoc.get_data(True)
-print(data)
+
 
 def part_1():
     sum_tot = 0
