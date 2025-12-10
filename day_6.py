@@ -30,11 +30,28 @@ def part_1():
 
 def part_2():
 	new_data = [list(d) for d in data]
-	# T = [[new_data[j][i] for j in range(len(new_data))] for i in range(len(new_data[0]))]
-	for i in range(len(new_data)):
-		# for j in range(len(new_data[i]):
-		print(new_data[i])
-		print(all(new_data[i][j] == ' ' for j in new_data[i]))
+	print(data)
+	T = [[new_data[j][i] for j in range(len(new_data))] for i in range(len(new_data[0]))]
+	q = [i for i, t in enumerate(T) if all(p == ' ' for p in t)]
+	q.append(len(new_data[0]))
+	print(q)
+	m = 0
+	print('---')
+
+	daa = [list(d) for d in data]
+	for d in data:
+		m = 0
+		for n in q:
+			print(d[m:n].replace(' ', '0')[::-1])
+			m = n + 1
+		print('---')
+
+	# print(q)
+	print(T)
+	# for i in range(len(new_data)):
+	# 	# for j in range(len(new_data[i]):
+	# 	print(new_data[i])
+	# 	print(all(new_data[i][j] == ' ' for j in new_data[i]))
 
 	return None
 	# do = [1 for d in data]
