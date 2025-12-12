@@ -3,6 +3,7 @@ import aoc
 data = aoc.get_data(True)
 data = [d.split('-') for d in data[0].split(',')]
 
+
 def part_1():
     count = 0
     for d in data:
@@ -15,11 +16,13 @@ def part_1():
                 count += i
     return count
 
+
 def split_into_chunks(s, n):
     try:
         return [s[i:i+n] for i in range(0, len(s), n)]
     except:
         return []
+
 
 def part_2():
     count = 0
@@ -33,9 +36,8 @@ def part_2():
                 if all_equal:
                     count += 1
                     break
-
-
     return count
+
 
 print('part 1:', part_1())
 print('part 2:', part_2())
