@@ -2,6 +2,7 @@ import aoc
 
 data = aoc.get_data(True)
 
+
 def part_1():
     state = 50
     count = 0
@@ -11,6 +12,7 @@ def part_1():
         count += 1 if state % 100 == 0 else 0
         state %= 100
     return count
+
 
 def part_2():
     state = 50
@@ -26,6 +28,7 @@ def part_2():
             if state == 0:
                 count += 1
     return count 
+
 
 print('part 1:', part_1())
 print('part 2:', part_2())
