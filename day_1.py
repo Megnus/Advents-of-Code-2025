@@ -25,7 +25,7 @@ def part_2():
                 state = 0
             if state == 0:
                 count += 1
-    return count
+    return count 
 
 print('part 1:', part_1())
 print('part 2:', part_2())
