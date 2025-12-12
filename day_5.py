@@ -11,7 +11,6 @@ while d != '':
 	index += 1
 	d = data[index]
 
-
 while index < len(data) - 1:
 	index += 1
 	ingredients.append(int(data[index]))
@@ -48,5 +47,5 @@ def part_2():
 	return sum(b - a + 1 for a, b in fresh)
 
 
-print('part 1:', part_1())s
+print('part 1:', part_1())
 print('part 2:', part_2())
