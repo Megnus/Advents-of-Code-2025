@@ -58,27 +58,15 @@ def mege_recursive(clusters):
 
 
 def mege_without_recursion(connections):
-# 	999 6277
-# 1000 6278
-# ((86005, 23974, 12506), (97906, 28543, 4213))
-# 8420405530
-	print(86005*97906)
 	for num in range(6277, len(connections)):
 		sub_connections = connections[:num]
 		clusters = [set(c) for c in sub_connections]
 
-		# print(clusters)
-		# for q in clusters:
-		# 	print(q)
-		# exit()
 		restart = True
 		while restart:
 			restart = False
 			for i, cluster in enumerate(clusters):
 				for c in cluster:
-					# c = (162, 817, 812)
-					# cluster
-					# print('*', len(clusters))
 					for j, sub_cluster in enumerate(clusters):
 						if i != j and c in sub_cluster:
 							clusters.remove(cluster)
