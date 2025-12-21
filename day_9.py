@@ -31,12 +31,11 @@ def create_sub_rectangles(rectangle):
     xn, yn = B
     rec_ticks_x = [x for x in x_ticks if x0 <= x <= xn]
     rec_ticks_y = [y for y in y_ticks if y0 <= y <= yn]
-    print()
-    sub_rectangles = set()
+    sub_rectangles = list()
     for y0, y1 in zip(rec_ticks_y[:-1], rec_ticks_y[1:]):
         for x0, x1 in zip(rec_ticks_x[:-1], rec_ticks_x[1:]):
-            sub_rectangles.add(((x0, y0), (x1, y1)))
-    return sub_rectangles
+            sub_rectangles.append([(x0, y0), (x1, y1)])
+    return sorted(sub_rectangles)
 
 
 # --- Two coordinate rectangle to side rectangle ---
@@ -51,6 +50,7 @@ def rectangle_to_sides(rectangle):
     d = sorted(((x0, y1), (x0, y0)))
     return  sorted((a, b, c, d))
 
+
 # --- Side rectangle Two coordinate rectangle to side rectangle ---
 # x_min, y_min, x_max, y_max = min(x for x, _ in rect), min(y for _, y in rect), max(x for x, _ in rect), max(y for _, y in rect)
 # ((x_min, y_min), (x_max, y_max))
@@ -62,20 +62,52 @@ def sides_to_rectangle(sides):
     return [(x_min, y_min), (x_max, y_max)]
 
 
+def is_rectangle_inside(rectangle):
+    sub_rectangles = create_sub_rectangles(rectangle)
+    return all(sub_rectangle in inside_rectangles for sub_rectangle in sub_rectangles)
+
+
+def get_fence():
+    return [sorted([a, b]) for a, b in zip(data[:-1], data[1:])] + [sorted([data[-1], data[0]])]
+
 
 def part_2():
-    for x in x_ticks:
-        print(x)
+    outside_rectangles = set()
+    searched_rectangles = set()
 
-    for y in y_ticks:
-        print(y)
+    fence_side_list = get_fence()
+    total_rectangle = [(min(x_ticks), min(y_ticks)), (max(x_ticks), max(y_ticks))]
 
-    print(create_sub_rectangles(((7,1), (11, 7))))
-    print(create_sub_rectangles(((7,5), (9, 7))))
+    total_rectangle_list = create_sub_rectangles(total_rectangle)
+    rectangle_search_stack = [total_rectangle_list[0]]
+    rectangle = rectangle_search_stack.pop(0)
+    sides = rectangle_to_sides(rectangle)
+    outside_rectangles.add(rectangle)
+    if any(side in fence_side_list for in side for sides):
+        
 
+
+
+    print(total_rectangle_list[0])
+    exit()
+
+
+    print(fence)
+    # main_set = create_sub_rectangles([(7,1), (11, 7)])
+    # sub_set = create_sub_rectangles([(7,5), (9, 7)])
     sides = rectangle_to_sides([(7,5), (9, 7)])
-    print(sides)
-    rect = sides_to_rectangle(sides)
+    # rectangle = sides_to_rectangle(sides)
+    sides.append( sorted( [(9, 5), (2, 5)] ) )
+    # rectangle = sides_to_rectangle(sides)
+    # sides = rectangle_to_sides([(7,5), (9, 7)])
+
+    print(sides, sides[-1] in fence)
+    
+
+    exit()
+    print(main_set)
+    print(sub_set)
+    print(sub_set[0] in main_set)
     print(rect)
 
     return None
