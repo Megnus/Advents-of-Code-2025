@@ -75,18 +75,44 @@ def part_2():
     outside_rectangles = set()
     searched_rectangles = set()
 
+    # All the sides in the fence.
     fence_side_list = get_fence()
+
+    # The rectangle that covers all the sub rectangles.
     total_rectangle = [(min(x_ticks), min(y_ticks)), (max(x_ticks), max(y_ticks))]
 
+    # All the sub rectangles
     total_rectangle_list = create_sub_rectangles(total_rectangle)
+
+    # The stack of all the rectangles to search from... These will be filled.
     rectangle_search_stack = [total_rectangle_list[0]]
+
+    # Explore the first rectangle.
     rectangle = rectangle_search_stack.pop(0)
+
+    # Get the sides of the explored rectangle.
     sides = rectangle_to_sides(rectangle)
+
+    # Add this to rectangle on the outside.
     outside_rectangles.add(rectangle)
-    if any(side in fence_side_list for in side for sides):
-        
 
+    if any(side in fence_side_list for side in sides):
+        # Add all rectangles that has not been explored and
+        # is not a side that is fence-side that is the same as the fence side that belongs
+        # to the present rectangle.
 
+        # 1. Get all rectangles that has not been explored.
+        # 2. Filter all unexplored rectangles that has the same side as the present rectangle.
+        # 3. If present rectangle has sides that are part of the fence then these sides of the rectangles
+        #    to explore is left out.
+    # - A: Rectangles that has the same side as the present rectangle,
+    # - B: Sides that are fence for the present rectangle.
+    # - Remove rectangles that has the sides B.
+
+    # New idea...
+    # A valid rectangle can not have subrectangles
+    # All rectangles that have sides that is part of the fence.
+    # That shoul become paris
 
     print(total_rectangle_list[0])
     exit()
