@@ -62,17 +62,30 @@ def sides_to_rectangle(sides):
     return [(x_min, y_min), (x_max, y_max)]
 
 
-def is_rectangle_inside(rectangle):
-    sub_rectangles = create_sub_rectangles(rectangle)
-    return all(sub_rectangle in inside_rectangles for sub_rectangle in sub_rectangles)
+# def is_rectangle_inside(rectangle):
+#     sub_rectangles = create_sub_rectangles(rectangle)
+#     return all(sub_rectangle in inside_rectangles for sub_rectangle in sub_rectangles)
 
 
 def get_fence():
-    return [sorted([a, b]) for a, b in zip(data[:-1], data[1:])] + [sorted([data[-1], data[0]])]
-
+    fence = [sorted([a, b]) for a, b in zip(data[:-1], data[1:])] + [sorted([data[-1], data[0]])]
+    f_fence = []
+    for f in fence:
+        A, B = f
+        x1, y1 = A
+        x2, y2 = B
+        if y1 == y2:
+            r = [x for x in x_ticks if x1 <= x <= x2]
+            r_zip = zip(r[:-1], r[1:])
+            f_fence += [sorted([(a, y1), (b, y1)]) for a, b in r_zip]
+        elif x1 == x2:
+            r = [y for y in y_ticks if y1 <= y <= y2]
+            r_zip = zip(r[:-1], r[1:])
+            f_fence += [sorted([(x1, a), (x1, b)]) for a, b in r_zip]
+    return f_fence
 
 def part_2():
-    outside_rectangles = set()
+    outside_rectangles = list()
     searched_rectangles = set()
 
     # All the sides in the fence.
@@ -94,9 +107,53 @@ def part_2():
     sides = rectangle_to_sides(rectangle)
 
     # Add this to rectangle on the outside.
-    outside_rectangles.add(rectangle)
+    outside_rectangles.append(rectangle)
 
-    if any(side in fence_side_list for side in sides):
+    all_fence_rect = [rect for rect in total_rectangle_list if
+                      any(side in fence_side_list for side in rectangle_to_sides(rect))]
+
+    all_none_fence_rect = [rect for rect in total_rectangle_list if
+                           not rect in all_fence_rect]
+
+    # rect all neighbours
+    explored_rectangles = list()
+    rectangle = [(0, 1), (2, 3)]
+    explored_rectangles.append(rectangle)
+    neighbour_rect = [rect for rect in total_rectangle_list
+        if rect not in explored_rectangles and
+            any(side in rectangle_to_sides(rectangle) for side in rectangle_to_sides(rect))]
+    # is_fence_rect = rectangle in fence_side_list
+    sides_that_is_fence = []
+    print(rectangle, neighbour_rect)
+
+    for p in total_rectangle_list:
+        print(p)
+    exit()
+    # if neigbours is a fence then add all rect that doesent share the fence side
+    # the neigbour that is a fence rect add that to outside rect
+
+    # exit()
+    for rect in total_rectangle_list:
+        sides = rectangle_to_sides(rect)
+        print(sides)
+        if any(side in fence_side_list for side in sides):
+            print(True)
+
+
+    for rect in all_fence_rect:
+        print(rect)
+    print()
+
+    # for rect in all_none_fence_rect:
+    #     print(rect)
+    # print()
+
+    for side in fence_side_list:
+        print(side)
+
+    # Check if any of side in the present rectangle has a side on the fence
+    # if any(side in fence_side_list for side in sides):
+
         # Add all rectangles that has not been explored and
         # is not a side that is fence-side that is the same as the fence side that belongs
         # to the present rectangle.
