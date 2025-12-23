@@ -84,6 +84,13 @@ def get_fence():
             f_fence += [sorted([(x1, a), (x1, b)]) for a, b in r_zip]
     return f_fence
 
+
+def get_neighbour_rectangles(rectangle, rectangle_list):
+    neighbour_rectangles = [rect for rect in rectangle_list if rect != rectangle and
+                            any(side in rectangle_to_sides(rectangle) for side in rectangle_to_sides(rect))]
+    return neighbour_rectangles
+
+
 def part_2():
     outside_rectangles = list()
     searched_rectangles = set()
@@ -115,13 +122,51 @@ def part_2():
     all_none_fence_rect = [rect for rect in total_rectangle_list if
                            not rect in all_fence_rect]
 
+    rectangle_to_side_dict = {tuple(rect): rectangle_to_sides(rect) for rect in total_rectangle_list}
+    total_side_list = {tuple(side) for rect in total_rectangle_list for side in rectangle_to_sides(rect)}
+    side_to_rectangle_dict = dict()
+    for rect in total_rectangle_list:
+        for side in rectangle_to_sides(rect):
+            side_to_rectangle_dict[tuple(side)] = side_to_rectangle_dict.get(tuple(side), []) + [rect]
+    # for k, v in rectangle_to_side_dict.items():
+    #     print(k, v)
+    # exit()
+    rectangle_to_rectangle_dict = dict()
+    for rect, sides in rectangle_to_side_dict.items():
+        for side in sides:
+            rectangle_to_rectangle_dict[tuple(rect)] = (
+                    rectangle_to_rectangle_dict.get(tuple(rect), []) + side_to_rectangle_dict.get(tuple(side), []))
+
+    for k, v in rectangle_to_rectangle_dict.items():
+        rectangle_to_rectangle_dict[k] = [rect for rect in v if rect != list(k)]
+        # print(list(k), rectangle_to_rectangle_dict[k])
+
+
+    print(len(rectangle_to_side_dict), len(side_to_rectangle_dict), len(rectangle_to_rectangle_dict))
+    # for k, v in rectangle_to_rectangle_dict.items():
+    #     print(k, v)
+
+    dictionary = dict()
+    for r in all_fence_rect:
+        dictionary[tuple(r)] = [rect for rect in all_fence_rect
+                                if any(s in rectangle_to_sides(rect) for s in rectangle_to_sides(r))]
+    for k, v in dictionary.items():
+        if len(v) <= 1:
+            print(k, v)
+    print('exit')
+    # All neighbours to rectangle
+    rectangle = [(0, 1), (2, 3)]
+    print(rectangle_to_rectangle_dict[tuple(rectangle)])
+    # All rectangles on the fence
+    print([rect for side in fence_side_list for rect in side_to_rectangle_dict[tuple(side)]])
+    exit()
     # rect all neighbours
     explored_rectangles = list()
     rectangle = [(0, 1), (2, 3)]
     explored_rectangles.append(rectangle)
     neighbour_rect = [rect for rect in total_rectangle_list
-        if rect not in explored_rectangles and
-            any(side in rectangle_to_sides(rectangle) for side in rectangle_to_sides(rect))]
+                      if rect not in explored_rectangles and
+                      any(side in rectangle_to_sides(rectangle) for side in rectangle_to_sides(rect))]
     # is_fence_rect = rectangle in fence_side_list
     sides_that_is_fence = []
     print(rectangle, neighbour_rect)
@@ -154,14 +199,14 @@ def part_2():
     # Check if any of side in the present rectangle has a side on the fence
     # if any(side in fence_side_list for side in sides):
 
-        # Add all rectangles that has not been explored and
-        # is not a side that is fence-side that is the same as the fence side that belongs
-        # to the present rectangle.
+    # Add all rectangles that has not been explored and
+    # is not a side that is fence-side that is the same as the fence side that belongs
+    # to the present rectangle.
 
-        # 1. Get all rectangles that has not been explored.
-        # 2. Filter all unexplored rectangles that has the same side as the present rectangle.
-        # 3. If present rectangle has sides that are part of the fence then these sides of the rectangles
-        #    to explore is left out.
+    # 1. Get all rectangles that has not been explored.
+    # 2. Filter all unexplored rectangles that has the same side as the present rectangle.
+    # 3. If present rectangle has sides that are part of the fence then these sides of the rectangles
+    #    to explore is left out.
     # - A: Rectangles that has the same side as the present rectangle,
     # - B: Sides that are fence for the present rectangle.
     # - Remove rectangles that has the sides B.
@@ -185,7 +230,7 @@ def part_2():
     # sides = rectangle_to_sides([(7,5), (9, 7)])
 
     print(sides, sides[-1] in fence)
-    
+
 
     exit()
     print(main_set)
