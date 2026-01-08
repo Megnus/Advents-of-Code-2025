@@ -1,7 +1,7 @@
 import aoc
 import itertools
 
-data = aoc.get_data(False)
+data = aoc.get_data(True)
 data = [tuple(int(i) for i in d.split(',')) for d in data]
 
 
@@ -92,8 +92,8 @@ def get_neighbour_rectangles(rectangle, rectangle_list):
 
 
 def part_2():
-    outside_rectangles = list()
-    searched_rectangles = set()
+    stack_rectangles = list()
+    outside_rectangles = set()
 
     # All the sides in the fence.
     fence_side_list = get_fence()
@@ -114,7 +114,7 @@ def part_2():
     sides = rectangle_to_sides(rectangle)
 
     # Add this to rectangle on the outside.
-    outside_rectangles.append(rectangle)
+    stack_rectangles.append(rectangle)
 
     all_fence_rect = [rect for rect in total_rectangle_list if
                       any(side in fence_side_list for side in rectangle_to_sides(rect))]
@@ -122,15 +122,19 @@ def part_2():
     all_none_fence_rect = [rect for rect in total_rectangle_list if
                            not rect in all_fence_rect]
 
+    # Rectangle to side
     rectangle_to_side_dict = {tuple(rect): rectangle_to_sides(rect) for rect in total_rectangle_list}
+
+    # ALl the sides
     total_side_list = {tuple(side) for rect in total_rectangle_list for side in rectangle_to_sides(rect)}
+    
+    # Side to rectangle
     side_to_rectangle_dict = dict()
     for rect in total_rectangle_list:
         for side in rectangle_to_sides(rect):
             side_to_rectangle_dict[tuple(side)] = side_to_rectangle_dict.get(tuple(side), []) + [rect]
-    # for k, v in rectangle_to_side_dict.items():
-    #     print(k, v)
-    # exit()
+
+    # Rectangle to rectangle
     rectangle_to_rectangle_dict = dict()
     for rect, sides in rectangle_to_side_dict.items():
         for side in sides:
@@ -141,6 +145,52 @@ def part_2():
         rectangle_to_rectangle_dict[k] = [rect for rect in v if rect != list(k)]
         # print(list(k), rectangle_to_rectangle_dict[k])
 
+
+    # rectangle = [(0, 1), (2, 3)]
+    # rectangle = [(0, 3), (2, 5)]
+    # rectangle = [(0, 5), (2, 7)]
+    # rectangle = [(2, 1), (7, 3)]
+
+    # if rectangle is fence_rectangel 
+    # (if rectangle in all_fence_rect)
+    # then the neighbour can not share the same fence-side as the rectangle
+    # (sides in rectangle that is in fence_side_list)
+    # sides in rectan that is fence sides (rect_sides = rectangle_to_sides_dict[tuple(rectangle)])
+    # sides in rectangle that is on the fence (side for sides in rect_sides if side in all_fence_rect )
+    # rectangles that shares this sides (side_to_rectangle_dict[side] for side in sides )
+    # list(set())
+
+    while stack_rectangles:
+        rectangle = stack_rectangles.pop(0)
+        if tuple(rectangle) in outside_rectangles:
+            continue
+        outside_rectangles.add(tuple(rectangle))
+        if rectangle in all_fence_rect:
+            fence_sides_in_rectangle = [side for side in rectangle_to_side_dict[tuple(rectangle)] if side in fence_side_list]
+            all_neighbours = rectangle_to_rectangle_dict[tuple(rectangle)]
+            all_neighbours_without_fence_side = [rect for rect in all_neighbours if not any(side in fence_sides_in_rectangle for side in rectangle_to_side_dict[tuple(rect)])]
+        else:
+            all_neighbours_without_fence_side = rectangle_to_rectangle_dict[tuple(rectangle)]
+        stack_rectangles += all_neighbours_without_fence_side
+
+    outside_rectangles = list(outside_rectangles)
+    # print(outside_rectangles)
+    for r in outside_rectangles:
+        print(r)
+
+
+    # Get a rectangle by edges.
+    # Sort it.
+    # Break it down to smaller rectangles.
+    # Check if one of these is outside rectangle.
+    # If yes continue.
+    # If no add this to stack.
+
+    # Calculate all area on all.
+    # Take max.
+
+    exit()
+    # ----------------------------------------
 
     print(len(rectangle_to_side_dict), len(side_to_rectangle_dict), len(rectangle_to_rectangle_dict))
     # for k, v in rectangle_to_rectangle_dict.items():
