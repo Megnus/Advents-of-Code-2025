@@ -29,13 +29,20 @@ def create_sub_rectangles(rectangle):
     A, B = rectangle
     x0, y0 = A
     xn, yn = B
+
+    x_0, y_0 = min(x0, xn), min(y0, yn)
+    x_n, y_n = max(x0, xn), max(y0, yn)
+    x0, y0, xn, yn = (x_0, y_0, x_n, y_n)
+
+
     rec_ticks_x = [x for x in x_ticks if x0 <= x <= xn]
     rec_ticks_y = [y for y in y_ticks if y0 <= y <= yn]
     sub_rectangles = list()
     for y0, y1 in zip(rec_ticks_y[:-1], rec_ticks_y[1:]):
         for x0, x1 in zip(rec_ticks_x[:-1], rec_ticks_x[1:]):
             sub_rectangles.append([(x0, y0), (x1, y1)])
-    return sorted(sub_rectangles)
+    result = sorted(sub_rectangles)
+    return result if result else [A, B]
 
 
 # --- Two coordinate rectangle to side rectangle ---
@@ -173,12 +180,61 @@ def part_2():
             all_neighbours_without_fence_side = rectangle_to_rectangle_dict[tuple(rectangle)]
         stack_rectangles += all_neighbours_without_fence_side
 
-    outside_rectangles = list(outside_rectangles)
+    outside_rectangles = [list(r) for r in outside_rectangles]
     # print(outside_rectangles)
-    for r in outside_rectangles:
-        print(r)
+    # for r in outside_rectangles:
+    #     print(r)
 
 
+    comb = list(itertools.combinations(data, 2))
+
+
+    # All the sub rectangles
+    # sub_rectangles = [(A, B, create_sub_rectangles(sorted([A, B]))) for A, B in comb if A != B]
+    # print(sub_rectangles)
+    # for ou in outside_rectangles:
+    #     print(ou)
+    # print()
+
+    # for A, B, sub_rects in sub_rectangles:
+    #     print(A, B, sub_rects, all(sub_rect not in outside_rectangles for sub_rect in sub_rects))
+
+    # comb_dist = [(A, B, (abs(A[0] - B[0]) + 1) * (abs(A[1] - B[1]) + 1)) for A, B, sub_rects in sub_rectangles 
+    #         if all(sub_rect not in outside_rectangles for sub_rect in sub_rects)]
+
+    comb_dist = [(A, B, (abs(A[0] - B[0]) + 1) * (abs(A[1] - B[1]) + 1)) for A, B in comb]
+
+    sorted_comb_dist = sorted(comb_dist, key=lambda c: c[2], reverse=True)
+
+    counter = 0
+    length = len(sorted_comb_dist)
+    for A, B, area in sorted_comb_dist:
+        if counter % 1000 == 0:
+            print(counter, '/', length, '\t', A, B, area)
+        if not any(sub_rect in outside_rectangles for sub_rect in create_sub_rectangles(sorted([A, B]))):
+            print(A, B, area)
+            break
+        counter += 1
+    # for cd in com
+    exit()
+
+    max_coordinate = max(comb_dist, key=lambda c: c[2])
+    A, B, area = max_coordinate
+    print()
+    print(A, B, area)
+    # Get a rectangle by edges.
+    exit()
+    print()
+
+    rect = [(11, 1), (2, 5)]
+    rect = [(2, 5), (11, 1)]
+    sub_rect = create_sub_rectangles(rect)
+    print(rect, sub_rect) 
+
+    exit()
+    comb_dist = [(A, B, (abs(A[0] - B[0]) + 1) * (abs(A[1] - B[1]) + 1)) for A, B in comb]
+    max_coordinate = max(comb_dist, key=lambda c: c[2])
+    A, B, area = max_coordinate
     # Get a rectangle by edges.
     # Sort it.
     # Break it down to smaller rectangles.
@@ -188,6 +244,8 @@ def part_2():
 
     # Calculate all area on all.
     # Take max.
+
+
 
     exit()
     # ----------------------------------------
