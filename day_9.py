@@ -206,12 +206,14 @@ def part_2():
 
     sorted_comb_dist = sorted(comb_dist, key=lambda c: c[2], reverse=True)
 
+    outside_rectangles = set(tuple(r) for r in outside_rectangles)
+
     counter = 0
     length = len(sorted_comb_dist)
     for A, B, area in sorted_comb_dist:
         if counter % 1000 == 0:
             print(counter, '/', length, '\t', A, B, area)
-        if not any(sub_rect in outside_rectangles for sub_rect in create_sub_rectangles(sorted([A, B]))):
+        if not any(tuple(sub_rect) in outside_rectangles for sub_rect in create_sub_rectangles(sorted([A, B]))):
             print(A, B, area)
             break
         counter += 1
