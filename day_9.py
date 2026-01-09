@@ -101,24 +101,15 @@ def part_2():
     # Explore the first rectangle.
     rectangle = rectangle_search_stack.pop(0)
 
-    # Get the sides of the explored rectangle.
-    sides = rectangle_to_sides(rectangle)
-
     # Add this to rectangle on the outside.
     stack_rectangles.append(rectangle)
 
     all_fence_rect = [rect for rect in total_rectangle_list if
                       any(side in fence_side_list for side in rectangle_to_sides(rect))]
 
-    all_none_fence_rect = [rect for rect in total_rectangle_list if
-                           not rect in all_fence_rect]
-
     # Rectangle to side
     rectangle_to_side_dict = {tuple(rect): rectangle_to_sides(rect) for rect in total_rectangle_list}
 
-    # ALl the sides
-    total_side_list = {tuple(side) for rect in total_rectangle_list for side in rectangle_to_sides(rect)}
-    
     # Side to rectangle
     side_to_rectangle_dict = dict()
     for rect in total_rectangle_list:
