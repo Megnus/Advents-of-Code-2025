@@ -3,8 +3,8 @@ import os
 import sys
 import requests
 
-session = ('53616c7465645f5fb41b5e0a6cd31137596bc68d1085d2a37c3d2eb7'
-           'a02591389d9bbb80fece36094e1f2d15660c4737d813267d1372267a0204aec8e1a8a331')
+session = ('53616c7465645f5f01770bd62ec4f8d14a9bf8395ced3b77fd333d5066395ba1118'
+           '9961da4f5fb02bc2954c4acfd1ca7c6c502fb548c7d271ec2bbc2f4e81669')
 
 
 def test_data():
