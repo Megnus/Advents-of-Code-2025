@@ -49,7 +49,6 @@ def part_1():
 	for goal, switch, _ in extracted_data:
 		counter = bfs(switch, 0, goal)
 		count += counter
-
 	return count
 
 
@@ -68,6 +67,7 @@ def part_2():
 			for i, m in enumerate(n):
 				X = x[m] if i == 0 else X + x[m]
 			prob += X == d_results[l]
+			
 		prob.solve(solver)
 		sum_count += sum(int(v.value()) for v in x)
 
